@@ -1,6 +1,8 @@
 import yt_dlp
 import sys
 import os
+import subprocess
+import glob
 
 def resource_path(relative_path):
     # Para suportar PyInstaller
@@ -26,3 +28,66 @@ def download_audio_youtube(video_url, output_path):
             ydl.download([video_url])
     except Exception as e:
         print("Erro no download do áudio:", str(e))
+
+def download_video_youtube(video_url, output_path):
+    try:
+        ffmpeg_dir = resource_path(os.path.join("ffmpeg", "bin"))
+        base_path = os.path.splitext(output_path)[0]
+        final_output = base_path + ".mp4"
+        
+        #pasta cache
+        cache_dir = os.path.join(os.path.abspath("."), "cache")
+        os.makedirs(cache_dir, exist_ok=True)
+
+        downloaded_files = []
+
+        def hook(d):
+            if d['status'] == 'finished':
+                downloaded_files.append(d['filename'])
+
+        ydl_opts = {
+            'format': 'bestvideo[ext=mp4]+bestaudio[ext=webm]/best',
+            'outtmpl': os.path.join(cache_dir, 'temp_video.%(format_id)s.%(ext)s'),
+            'ffmpeg_location': ffmpeg_dir,
+            'noplaylist': True,
+            'progress_hooks': [hook],
+            'keepvideo': True,  # <-- ESSENCIAL PARA EVITAR A DELEÇÃO DOS ARQUIVOS
+            'merge_output_format': None,
+        }
+
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([video_url])
+
+        # Identifica os arquivos baixados
+        video_file = next((f for f in downloaded_files if f.endswith(".mp4")), None)
+        audio_file = next((f for f in downloaded_files if f.endswith(".webm")), None)
+
+        if not video_file or not audio_file:
+            raise Exception("Não foi possível localizar os arquivos baixados.")
+
+        # Merge com ffmpeg
+        cmd = [
+            os.path.join(ffmpeg_dir, 'ffmpeg'),
+            '-i', video_file,
+            '-i', audio_file,
+            '-c:v', 'copy',
+            '-c:a', 'aac',
+            '-strict', 'experimental',
+            '-y',
+            final_output
+        ]
+        subprocess.run(cmd, check=True)
+
+        # Remove temporários
+        os.remove(video_file)
+        os.remove(audio_file)
+        
+        # Apaga arquivos extra gerados no cache
+        extra_files = glob.glob(os.path.join(cache_dir, "temp_video.*+*.webm"))
+        for f in extra_files:
+            os.remove(f)
+
+        print(f"✅ Vídeo salvo em: {final_output}")
+
+    except Exception as e:
+        print("Erro no download do vídeo:", str(e))
