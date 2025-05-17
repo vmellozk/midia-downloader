@@ -69,7 +69,8 @@ PySimpleGUI
 - Suporte a mais plataformas  
 - Melhoria na verificação e validação de links  
 - Mais opções de formatos e qualidades de saída  
-- Interface cada vez mais amigável e responsiva  
+- Interface cada vez mais amigável e responsiva
+- Build para criar um App Executável
 
 ---
 
