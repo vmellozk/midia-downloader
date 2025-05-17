@@ -6,6 +6,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtCore import QStandardPaths
 from gui.styles import MINIMAL_STYLE
 from .worker_audio import DownloadAudioWorker
+from .worker_video import DownloadVideoWorker
 
 from core.instagram import download_video_instagram
 from PySide6.QtGui import QIcon
@@ -84,10 +85,16 @@ class MainWindow(QWidget):
 
         actions_group = QGroupBox("Ação")
         actions_layout = QHBoxLayout()
-        convert_button = QPushButton("Baixar Áudio")
-        convert_button.clicked.connect(self.download_youtube_audio)
 
-        actions_layout.addWidget(convert_button)
+        convert_button_audio = QPushButton("Baixar Áudio")
+        convert_button_audio.clicked.connect(self.download_youtube_audio)
+
+        convert_button_video = QPushButton("Baixar Vídeo")
+        convert_button_video.clicked.connect(self.download_youtube_video)
+
+        actions_layout.addWidget(convert_button_audio)
+        actions_layout.addWidget(convert_button_video)
+
         actions_group.setLayout(actions_layout)
         layout.addWidget(actions_group)
 
@@ -155,6 +162,23 @@ class MainWindow(QWidget):
         self.logs.clear()
 
         self.worker = DownloadAudioWorker(url, output, filename)
+        self.worker.log_signal.connect(self.log)
+        self.worker.finished_signal.connect(self.on_process_finished)
+        self.worker.error_signal.connect(self.on_process_error)
+        self.worker.start()
+        
+    def download_youtube_video(self):
+        url = self.youtube_url.text().strip()
+        output = self.output_dir.text().strip()
+        filename = self.filename_input.text().strip() or "video"
+
+        if not url or not output:
+            self.show_message("Por favor, preencha a URL e o diretório de saída.")
+            return
+
+        self.logs.clear()
+
+        self.worker = DownloadVideoWorker(url, output, filename)
         self.worker.log_signal.connect(self.log)
         self.worker.finished_signal.connect(self.on_process_finished)
         self.worker.error_signal.connect(self.on_process_error)
