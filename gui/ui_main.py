@@ -5,7 +5,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtCore import QStandardPaths
 from gui.styles import MINIMAL_STYLE
-from .worker import DownloadAudioWorker
+from .worker_audio import DownloadAudioWorker
 
 from core.instagram import download_video_instagram
 from PySide6.QtGui import QIcon
