@@ -3,15 +3,11 @@
 Este projeto foi criado para oferecer uma solução **gratuita** e **acessível** para baixar vídeos e áudios de diversas plataformas, como **YouTube** e **redes sociais**.  
 Ideal para quem deseja salvar conteúdos para **estudo**, **trabalho** ou **lazer**, sem depender de ferramentas pagas ou com anúncios.
 
----
-
 ## 🔧 Tecnologias Utilizadas
 
 - **[yt_dlp](https://github.com/yt-dlp/yt-dlp)** – Biblioteca poderosa para download de vídeos e áudios de múltiplas plataformas.  
 - **[PySimpleGUI](https://pysimplegui.readthedocs.io/)** – Interface gráfica simples, leve e intuitiva.  
 - **os** – Manipulação de arquivos e diretórios no sistema operacional.
-
----
 
 ## 📌 Como Funciona
 
@@ -20,7 +16,17 @@ Ideal para quem deseja salvar conteúdos para **estudo**, **trabalho** ou **laze
 3. Define a **pasta de destino** onde o conteúdo será salvo.
 4. Com um clique, o sistema realiza o **download automático** e salva o arquivo.
 
----
+## 🎬 Demonstração do Projeto (Vídeo)
+
+[![Assista à apresentação no YouTube](https://img.youtube.com/vi/5T__ed89DhM/maxresdefault.jpg)](https://www.youtube.com/watch?v=5T__ed89DhM)
+
+## 🔄 Em Desenvolvimento Contínuo
+
+- Suporte a mais plataformas  
+- Melhoria na verificação e validação de links  
+- Mais opções de formatos e qualidades de saída  
+- Interface cada vez mais amigável e responsiva
+- Build para criar um App Executável
 
 ## 🚀 Como Executar o Projeto
 
@@ -64,16 +70,6 @@ yt_dlp
 
 PySimpleGUI
 
-## 🔄 Em Desenvolvimento Contínuo
-
-- Suporte a mais plataformas  
-- Melhoria na verificação e validação de links  
-- Mais opções de formatos e qualidades de saída  
-- Interface cada vez mais amigável e responsiva
-- Build para criar um App Executável
-
----
-
 ## 💡 Sobre o Projeto
 
 Este é um projeto independente, com foco em:
@@ -83,8 +79,6 @@ Este é um projeto independente, com foco em:
 - Liberdade de acesso ao conteúdo  
 
 Sinta-se à vontade para contribuir, sugerir melhorias ou relatar problemas.
-
----
 
 ## 🤝 Contribuindo
 
