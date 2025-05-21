@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (
     QWidget, QPushButton, QLabel, QLineEdit, QFileDialog,
     QVBoxLayout, QTabWidget, QMessageBox, QHBoxLayout, QGroupBox,
-    QProgressBar, QTextEdit, QApplication
+    QProgressBar, QTextEdit, QApplication, QComboBox
 )
 from PySide6.QtCore import QStandardPaths
 from gui.styles import MINIMAL_STYLE
@@ -68,10 +68,10 @@ class MainWindow(QWidget):
         filename_group = QGroupBox("Nome do arquivo:")
         filename_layout = QHBoxLayout()
         self.filename_input = QLineEdit()
-        self.filename_input.setText("audio")
+        self.filename_input.setText("download_midia")
         filename_layout.addWidget(self.filename_input)
-        ext_label = QLabel(".mp3")
-        filename_layout.addWidget(ext_label)
+        #ext_label = QLabel(".mp3")
+        #filename_layout.addWidget(ext_label)
         filename_group.setLayout(filename_layout)
         layout.addWidget(filename_group)
         
@@ -84,17 +84,31 @@ class MainWindow(QWidget):
         layout.addWidget(output_group)
 
         actions_group = QGroupBox("Ação")
-        actions_layout = QHBoxLayout()
+        actions_layout = QVBoxLayout()
+        
+        # ComboBox de Qualidade
+        self.quality_selector = QComboBox()
+        self.quality_selector.addItems([
+            "Melhor (Automático)",
+            "1080p",
+            "720p",
+            "480p",
+            "Áudio apenas"
+        ])
+        actions_layout.addWidget(QLabel("Qualidade do vídeo:"))
+        actions_layout.addWidget(self.quality_selector)
 
+        # Botões de ação
+        button_layout = QHBoxLayout()
         convert_button_audio = QPushButton("Baixar Áudio")
         convert_button_audio.clicked.connect(self.download_youtube_audio)
-
         convert_button_video = QPushButton("Baixar Vídeo")
         convert_button_video.clicked.connect(self.download_youtube_video)
 
-        actions_layout.addWidget(convert_button_audio)
-        actions_layout.addWidget(convert_button_video)
+        button_layout.addWidget(convert_button_audio)
+        button_layout.addWidget(convert_button_video)
 
+        actions_layout.addLayout(button_layout)
         actions_group.setLayout(actions_layout)
         layout.addWidget(actions_group)
 
@@ -171,6 +185,7 @@ class MainWindow(QWidget):
         url = self.youtube_url.text().strip()
         output = self.output_dir.text().strip()
         filename = self.filename_input.text().strip() or "video"
+        quality = self.quality_selector.currentText()
 
         if not url or not output:
             self.show_message("Por favor, preencha a URL e o diretório de saída.")
@@ -178,7 +193,7 @@ class MainWindow(QWidget):
 
         self.logs.clear()
 
-        self.worker = DownloadVideoWorker(url, output, filename)
+        self.worker = DownloadVideoWorker(url, output, filename, quality)
         self.worker.log_signal.connect(self.log)
         self.worker.finished_signal.connect(self.on_process_finished)
         self.worker.error_signal.connect(self.on_process_error)
