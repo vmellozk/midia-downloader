@@ -220,3 +220,4 @@ class MainWindow(QWidget):
                 self.show_message("Download do vídeo IG concluído!")
             except Exception as e:
                 self.show_message(f"Erro: {str(e)}")
+ 
