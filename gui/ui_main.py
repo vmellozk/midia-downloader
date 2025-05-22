@@ -86,32 +86,39 @@ class MainWindow(QWidget):
         actions_group = QGroupBox("Ação")
         actions_layout = QVBoxLayout()
         
-        # ComboBox de Qualidade
+        #
+        video_group = QGroupBox("Download de Vídeo")
+        video_layout = QVBoxLayout()
         self.quality_selector = QComboBox()
         self.quality_selector.addItems([
             "Melhor (Automático)",
             "1080p",
             "720p",
-            "480p",
-            "Áudio apenas"
+            "480p"
         ])
-        actions_layout.addWidget(QLabel("Qualidade do vídeo:"))
-        actions_layout.addWidget(self.quality_selector)
-
-        # Botões de ação
-        button_layout = QHBoxLayout()
-        convert_button_audio = QPushButton("Baixar Áudio")
-        convert_button_audio.clicked.connect(self.download_youtube_audio)
+        
+        video_layout.addWidget(QLabel("Qualidade do vídeo:"))
+        video_layout.addWidget(self.quality_selector)
         convert_button_video = QPushButton("Baixar Vídeo")
         convert_button_video.clicked.connect(self.download_youtube_video)
+        video_layout.addWidget(convert_button_video)
+        
+        video_group.setLayout(video_layout)
+        actions_layout.addWidget(video_group)
+        
+        #
+        audio_group = QGroupBox("Download de Áudio")
+        audio_layout = QVBoxLayout()
+        convert_button_audio = QPushButton("Baixar Áudio")
+        convert_button_audio.clicked.connect(self.download_youtube_audio)
+        audio_layout.addWidget(convert_button_audio)
 
-        button_layout.addWidget(convert_button_audio)
-        button_layout.addWidget(convert_button_video)
-
-        actions_layout.addLayout(button_layout)
+        audio_group.setLayout(audio_layout)
+        actions_layout.addWidget(audio_group)
+        
         actions_group.setLayout(actions_layout)
         layout.addWidget(actions_group)
-
+        
         widget.setLayout(layout)
         return widget
 
