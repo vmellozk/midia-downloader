@@ -8,11 +8,12 @@ class DownloadVideoWorker(QThread):
     finished_signal = Signal(str)
     error_signal = Signal(str)
 
-    def __init__(self, url, output_dir, filename):
+    def __init__(self, url, output_dir, filename, quality):
         super().__init__()
         self.url = url
         self.output_dir = output_dir
         self.filename = filename
+        self.quality = quality
         
     def log(self, message):
         self.log_signal.emit(message)
@@ -30,7 +31,7 @@ class DownloadVideoWorker(QThread):
             video_path = f"{video_base}.mp4"
 
             self.log("Baixando e convertendo o vídeo para mp4...")
-            download_video_youtube(self.url, video_base)
+            download_video_youtube(self.url, video_base, self.quality)
 
             self.log("Finalizando o download e salvando o arquivo...")
             self.finished_signal.emit(video_path)
