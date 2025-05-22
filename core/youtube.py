@@ -29,7 +29,7 @@ def download_audio_youtube(video_url, output_path):
     except Exception as e:
         print("Erro no download do áudio:", str(e))
 
-def download_video_youtube(video_url, output_path):
+def download_video_youtube(video_url, output_path, quality):
     try:
         ffmpeg_dir = resource_path(os.path.join("ffmpeg", "bin"))
         base_path = os.path.splitext(output_path)[0]
@@ -45,8 +45,18 @@ def download_video_youtube(video_url, output_path):
             if d['status'] == 'finished':
                 downloaded_files.append(d['filename'])
 
+        # Mapeamento da qualidade para os formatos yt-dlp
+        quality_map = {
+            "Melhor (Automático)": "bestvideo[ext=mp4]+bestaudio[ext=webm]/best",
+            "1080p": "137+bestaudio/best[height<=1080]",
+            "720p": "22/best[height<=720]",
+            "480p": "135+bestaudio/best[height<=480]"
+        }
+
+        selected_format = quality_map.get(quality, "bestvideo[ext=mp4]+bestaudio[ext=webm]/best")
+
         ydl_opts = {
-            'format': 'bestvideo[ext=mp4]+bestaudio[ext=webm]/best',
+            'format': selected_format,
             'outtmpl': os.path.join(cache_dir, 'temp_video.%(format_id)s.%(ext)s'),
             'ffmpeg_location': ffmpeg_dir,
             'noplaylist': True,
