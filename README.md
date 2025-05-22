@@ -13,8 +13,9 @@ Ideal para quem deseja salvar conteúdos para **estudo**, **trabalho** ou **laze
 
 1. O usuário insere o **link** do conteúdo desejado.
 2. Escolhe o **formato** de saída: vídeo completo ou apenas áudio.
-3. Define a **pasta de destino** onde o conteúdo será salvo.
-4. Com um clique, o sistema realiza o **download automático** e salva o arquivo.
+3. Escolhe a qualidade do vídeo, se não a melhor será baixada por padrão.
+4. Define a **pasta de destino** onde o conteúdo será salvo.
+5. Com um clique, o sistema realiza o **download automático** e salva o arquivo.
 
 ## 🎬 Demonstração do Projeto (Vídeo)
 
