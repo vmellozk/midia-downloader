@@ -16,7 +16,7 @@ class MainWindow(QWidget):
         super().__init__()
         self.setWindowTitle("Downloader Midia")
         self.setWindowIcon(QIcon("assets/icon.png"))
-        self.setMinimumSize(600, 400)
+        self.setMinimumSize(600, 850)
         self.setStyleSheet(MINIMAL_STYLE)
         self.init_ui()
 
