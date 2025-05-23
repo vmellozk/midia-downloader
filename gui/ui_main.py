@@ -16,11 +16,11 @@ class MainWindow(QWidget):
         super().__init__()
         self.setWindowTitle("Downloader Midia")
         self.setWindowIcon(QIcon("assets/icon.png"))
-        self.setMinimumSize(700, 850)
+        self.setMinimumSize(700, 900)
         self.setStyleSheet(MINIMAL_STYLE)
         self.init_ui()
 
-        main_layout = QHBoxLayout()
+        main_layout = QVBoxLayout()
         self.sidebar = Sidebar()
         self.content_area = QStackedWidget()
 
