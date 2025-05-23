@@ -1,12 +1,13 @@
 from PySide6.QtWidgets import (
     QWidget, QPushButton, QLabel, QLineEdit, QFileDialog,
     QVBoxLayout, QTabWidget, QMessageBox, QHBoxLayout, QGroupBox,
-    QProgressBar, QTextEdit, QApplication, QComboBox
+    QProgressBar, QTextEdit, QApplication, QComboBox, QStackedWidget
 )
 from PySide6.QtCore import QStandardPaths
 from gui.styles import MINIMAL_STYLE
 from .worker_audio import DownloadAudioWorker
 from .worker_video import DownloadVideoWorker
+from .sidebar import Sidebar
 #from core.instagram import download_video_instagram
 from PySide6.QtGui import QIcon
 
@@ -15,9 +16,22 @@ class MainWindow(QWidget):
         super().__init__()
         self.setWindowTitle("Downloader Midia")
         self.setWindowIcon(QIcon("assets/icon.png"))
-        self.setMinimumSize(600, 850)
+        self.setMinimumSize(700, 850)
         self.setStyleSheet(MINIMAL_STYLE)
         self.init_ui()
+
+        main_layout = QHBoxLayout()
+        self.sidebar = Sidebar()
+        self.content_area = QStackedWidget()
+
+        # A interface principal será um widget (a tela principal)
+        self.main_screen = QWidget()
+        self.main_screen.setLayout(self.init_ui())  # retorna o layout já montado
+        self.content_area.addWidget(self.main_screen)
+
+        main_layout.addWidget(self.sidebar)
+        main_layout.addWidget(self.content_area, 1)
+        self.setLayout(main_layout)
 
     def init_ui(self):
         layout = QVBoxLayout()
@@ -46,7 +60,7 @@ class MainWindow(QWidget):
         footer.setStyleSheet("font-size: 10pt; color: #888;")
         layout.addWidget(footer)
 
-        self.setLayout(layout)
+        return layout
 
     def youtube_tab_ui(self):
         widget = QWidget()
