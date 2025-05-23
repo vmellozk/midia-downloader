@@ -7,7 +7,7 @@ from PySide6.QtCore import QStandardPaths
 from gui.styles import MINIMAL_STYLE
 from .worker_audio import DownloadAudioWorker
 from .worker_video import DownloadVideoWorker
-from .sidebar import Sidebar
+from .sidebar import Sidebar, HomeScreen, SettingsScreen
 #from core.instagram import download_video_instagram
 from PySide6.QtGui import QIcon
 
@@ -18,20 +18,31 @@ class MainWindow(QWidget):
         self.setWindowIcon(QIcon("assets/icon.png"))
         self.setMinimumSize(700, 900)
         self.setStyleSheet(MINIMAL_STYLE)
-        self.init_ui()
 
         main_layout = QVBoxLayout()
         self.sidebar = Sidebar()
+        self.sidebar.change_scr.connect(self.switch_screen)
         self.content_area = QStackedWidget()
-
-        # A interface principal será um widget (a tela principal)
+        
+        # A interface principal será um widget (a tela principal), definindo as interfaces
         self.main_screen = QWidget()
         self.main_screen.setLayout(self.init_ui())  # retorna o layout já montado
+        self.home_screen = HomeScreen()
+        self.settings_screen = SettingsScreen()
+
         self.content_area.addWidget(self.main_screen)
+        self.content_area.addWidget(self.home_screen)
+        self.content_area.addWidget(self.settings_screen)
 
         main_layout.addWidget(self.sidebar)
         main_layout.addWidget(self.content_area, 1)
         self.setLayout(main_layout)
+        
+    def switch_screen(self, screen_name):
+        if screen_name == "home":
+            self.content_area.setCurrentWidget(self.main_screen)
+        elif screen_name == "settings":
+            self.content_area.setCurrentWidget(self.settings_screen)
 
     def init_ui(self):
         layout = QVBoxLayout()
