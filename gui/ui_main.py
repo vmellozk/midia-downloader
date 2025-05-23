@@ -7,8 +7,7 @@ from PySide6.QtCore import QStandardPaths
 from gui.styles import MINIMAL_STYLE
 from .worker_audio import DownloadAudioWorker
 from .worker_video import DownloadVideoWorker
-
-from core.instagram import download_video_instagram
+#from core.instagram import download_video_instagram
 from PySide6.QtGui import QIcon
 
 class MainWindow(QWidget):
@@ -218,7 +217,7 @@ class MainWindow(QWidget):
         self.log(f"Erro: {error_msg}")
         self.show_message(f"Ocorreu um erro: {error_msg}")
 
-    def download_video_instagram_ui(self):
+    '''def download_video_instagram_ui(self):
         url = self.instagram_url.text()
         output = self.output_dir_ig.text()
         if url and output:
@@ -226,5 +225,4 @@ class MainWindow(QWidget):
                 download_video_instagram(url, output)
                 self.show_message("Download do vídeo IG concluído!")
             except Exception as e:
-                self.show_message(f"Erro: {str(e)}")
- 
+                self.show_message(f"Erro: {str(e)}")'''
