@@ -83,10 +83,8 @@ class MainWindow(QWidget):
         output_group.setLayout(output_layout)
         layout.addWidget(output_group)
 
-        actions_group = QGroupBox("Ação")
-        actions_layout = QVBoxLayout()
-        
-        #
+        # Parte do Vídeo
+        actions_layout_video = QVBoxLayout()
         video_group = QGroupBox("Download de Vídeo")
         video_layout = QVBoxLayout()
         self.quality_selector = QComboBox()
@@ -96,17 +94,20 @@ class MainWindow(QWidget):
             "720p",
             "480p"
         ])
-        
-        video_layout.addWidget(QLabel("Qualidade do vídeo:"))
+        video_layout.addWidget(QLabel("Qualidade:"))
         video_layout.addWidget(self.quality_selector)
         convert_button_video = QPushButton("Baixar Vídeo")
         convert_button_video.clicked.connect(self.download_youtube_video)
         video_layout.addWidget(convert_button_video)
         
         video_group.setLayout(video_layout)
-        actions_layout.addWidget(video_group)
+        actions_layout_video.addWidget(video_group)
+        video_group.setLayout(actions_layout_video)
+        layout.addWidget(video_group)
         
-        #
+        # Parte do Áudio
+        actions_group_audio = QGroupBox()
+        actions_layout_audio = QVBoxLayout()
         audio_group = QGroupBox("Download de Áudio")
         audio_layout = QVBoxLayout()
         convert_button_audio = QPushButton("Baixar Áudio")
@@ -114,10 +115,9 @@ class MainWindow(QWidget):
         audio_layout.addWidget(convert_button_audio)
 
         audio_group.setLayout(audio_layout)
-        actions_layout.addWidget(audio_group)
-        
-        actions_group.setLayout(actions_layout)
-        layout.addWidget(actions_group)
+        actions_layout_audio.addWidget(audio_group)
+        actions_group_audio.setLayout(actions_layout_audio)
+        layout.addWidget(actions_group_audio)
         
         widget.setLayout(layout)
         return widget
