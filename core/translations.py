@@ -38,6 +38,7 @@ translations = {
         "open_folder": "Abrir pasta após o download",
         "changed_language": "Idioma alterado",
         "restart_app": "Reinicie o aplicativo para aplicar a mudança de idioma.",
+        "best": "Melhor (Automático)",
     },
     "en": {
         "title": "⬇️ Download Audio and Video",
@@ -77,6 +78,7 @@ translations = {
         "dark_mode": "Enable dark mode",
         "open_folder": "Open folder after download",
         "changed_language": "Language changed",
-        "restart_app": "Restart the application to apply the language change."
+        "restart_app": "Restart the application to apply the language change.",
+        "best": "Best (Automatic)",
     }
 }
