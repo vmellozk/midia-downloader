@@ -10,10 +10,16 @@ from .worker_video import DownloadVideoWorker
 from .sidebar import Sidebar, HomeScreen, SettingsScreen
 #from core.instagram import download_video_instagram
 from PySide6.QtGui import QIcon
+from core.translations import translations
+from core.config import load_config, save_config
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
+        self.config = load_config()
+        self.lang = self.config.get("language", "pt")
+        self.t = translations[self.lang] #referência direta à tradução
+        
         self.setWindowTitle("Downloader Midia")
         self.setWindowIcon(QIcon("assets/icon.png"))
         self.setMinimumSize(700, 900)
@@ -28,7 +34,10 @@ class MainWindow(QWidget):
         self.main_screen = QWidget()
         self.main_screen.setLayout(self.init_ui())  # retorna o layout já montado
         self.home_screen = HomeScreen()
-        self.settings_screen = SettingsScreen()
+        self.settings_screen = SettingsScreen(self.lang)
+        
+        # conecta o sinal de mudança de idioma
+        self.settings_screen.language_changed.connect(self.change_language)
 
         self.content_area.addWidget(self.main_screen)
         self.content_area.addWidget(self.home_screen)
@@ -43,12 +52,17 @@ class MainWindow(QWidget):
             self.content_area.setCurrentWidget(self.main_screen)
         elif screen_name == "settings":
             self.content_area.setCurrentWidget(self.settings_screen)
+            
+    def change_language(self, lang_code):
+        self.config["language"] = lang_code
+        save_config(self.config)
+        QMessageBox.information(self, self.t["changed_language"], self.t["restart_app"])
 
     def init_ui(self):
         layout = QVBoxLayout()
 
         # Header
-        header = QLabel("⬇️ Baixar Áudio e Vídeo")
+        header = QLabel(self.t["title"])
         header.setStyleSheet("font-size: 20pt; font-weight: bold;")
         layout.addWidget(header)
 
@@ -62,12 +76,12 @@ class MainWindow(QWidget):
         self.progress = QProgressBar()
         self.logs = QTextEdit()
         self.logs.setReadOnly(True)
-        self.logs.setPlaceholderText("Log de atividades...")
+        self.logs.setPlaceholderText(self.t["logs_placeholder"])
         layout.addWidget(self.progress)
         layout.addWidget(self.logs)
 
         # Rodapé
-        footer = QLabel("Criado com 💙 por vmellozk")
+        footer = QLabel(self.t["footer"])
         footer.setStyleSheet("font-size: 10pt; color: #888;")
         layout.addWidget(footer)
 
@@ -77,19 +91,19 @@ class MainWindow(QWidget):
         widget = QWidget()
         layout = QVBoxLayout()
 
-        url_group = QGroupBox("Cole sua URL aqui:")
+        url_group = QGroupBox(self.t["url_input"])
         url_layout = QHBoxLayout()
         self.youtube_url = QLineEdit()
         url_layout.addWidget(self.youtube_url)
         url_group.setLayout(url_layout)
         layout.addWidget(url_group)
 
-        output_group = QGroupBox("Salvar em:")
+        output_group = QGroupBox(self.t["save"])
         output_layout = QHBoxLayout()
         self.output_dir = QLineEdit()
-        browse_button = QPushButton("Pasta de destino")
+        browse_button = QPushButton(self.t["folder"])
         
-        filename_group = QGroupBox("Nome do arquivo:")
+        filename_group = QGroupBox(self.t["archive_name"])
         filename_layout = QHBoxLayout()
         self.filename_input = QLineEdit()
         self.filename_input.setText("download_midia")
@@ -109,18 +123,18 @@ class MainWindow(QWidget):
 
         # Parte do Vídeo
         actions_layout_video = QVBoxLayout()
-        video_group = QGroupBox("Download de Vídeo")
+        video_group = QGroupBox(self.t["video_download"])
         video_layout = QVBoxLayout()
         self.quality_selector = QComboBox()
         self.quality_selector.addItems([
-            "Melhor (Automático)",
+            self.t["best"],
             "1080p",
             "720p",
             "480p"
         ])
-        video_layout.addWidget(QLabel("Qualidade:"))
+        video_layout.addWidget(QLabel(self.t["quality"]))
         video_layout.addWidget(self.quality_selector)
-        convert_button_video = QPushButton("Baixar Vídeo")
+        convert_button_video = QPushButton(self.t["download_video"])
         convert_button_video.clicked.connect(self.download_youtube_video)
         video_layout.addWidget(convert_button_video)
         
@@ -132,9 +146,9 @@ class MainWindow(QWidget):
         # Parte do Áudio
         actions_group_audio = QGroupBox()
         actions_layout_audio = QVBoxLayout()
-        audio_group = QGroupBox("Download de Áudio")
+        audio_group = QGroupBox(self.t["audio_download"])
         audio_layout = QVBoxLayout()
-        convert_button_audio = QPushButton("Baixar Áudio")
+        convert_button_audio = QPushButton(self.t["download_audio"])
         convert_button_audio.clicked.connect(self.download_youtube_audio)
         audio_layout.addWidget(convert_button_audio)
 
@@ -179,7 +193,7 @@ class MainWindow(QWidget):
         return widget'''
     
     def select_output_dir(self):
-        path = QFileDialog.getExistingDirectory(self, "Selecionar Diretório")
+        path = QFileDialog.getExistingDirectory(self, self.t["folder_directory"])
         if path:
             self.output_dir.setText(path)
 
@@ -201,7 +215,7 @@ class MainWindow(QWidget):
         filename = self.filename_input.text().strip() or "audio"
 
         if not url or not output:
-            self.show_message("Por favor, preencha a URL e o diretório de saída.")
+            self.show_message(self.t["status_message"])
             return
 
         self.logs.clear()
@@ -219,7 +233,7 @@ class MainWindow(QWidget):
         quality = self.quality_selector.currentText()
 
         if not url or not output:
-            self.show_message("Por favor, preencha a URL e o diretório de saída.")
+            self.show_message(self.t["status_message"])
             return
 
         self.logs.clear()
@@ -236,11 +250,11 @@ class MainWindow(QWidget):
 
     def on_process_finished(self, transcription_path):
         self.log(f"O áudio está salvo em: {transcription_path}")
-        self.show_message("Download realizado com sucesso!")
+        self.show_message(self.t["sucess_download"])
 
     def on_process_error(self, error_msg):
         self.log(f"Erro: {error_msg}")
-        self.show_message(f"Ocorreu um erro: {error_msg}")
+        self.show_message(self.t["error_download"], {error_msg})
 
     '''def download_video_instagram_ui(self):
         url = self.instagram_url.text()
