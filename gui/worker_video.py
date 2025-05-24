@@ -2,6 +2,8 @@ from PySide6.QtCore import QThread, Signal
 import os
 import time
 from core.youtube import download_video_youtube
+from core.translations import translations
+from core.config import load_config
 
 class DownloadVideoWorker(QThread):
     log_signal = Signal(str)
@@ -10,6 +12,10 @@ class DownloadVideoWorker(QThread):
 
     def __init__(self, url, output_dir, filename, quality):
         super().__init__()
+        self.config = load_config()
+        self.lang = self.config.get("language", "pt")
+        self.t = translations[self.lang] # referência à tradução
+        
         self.url = url
         self.output_dir = output_dir
         self.filename = filename
@@ -20,7 +26,7 @@ class DownloadVideoWorker(QThread):
 
     def run(self):
         try:
-            self.log("Processando o vídeo para começar o download...")
+            self.log(self.t["process_video"])
             time.sleep(3)
 
             video_base = os.path.join(self.output_dir, self.filename)
@@ -30,10 +36,10 @@ class DownloadVideoWorker(QThread):
                 counter += 1
             video_path = f"{video_base}.mp4"
 
-            self.log("Baixando e convertendo o vídeo para mp4...")
+            self.log(self.t["download_and_convert_video"])
             download_video_youtube(self.url, video_base, self.quality)
 
-            self.log("Finalizando o download e salvando o arquivo...")
+            self.log(self.t["finishing_download"])
             self.finished_signal.emit(video_path)
 
         except Exception as e:
