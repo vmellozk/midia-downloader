@@ -98,6 +98,14 @@ class SettingsScreen(QWidget):
     
     def save_settings(self):
         lang_text = self.language_combo.currentText()
-        lang_code = "pt" if "Português" in lang_text else "en"
+        if "Português" in lang_text:
+            lang_code = "pt"
+        elif "English" in lang_text:
+            lang_code = "en"
+        elif "Español" in lang_text:
+            lang_code = "es"
+        else:
+            lang_code = "pt"  # fallback caso inesperado
+        
         save_config({"language": lang_code})
         self.language_changed.emit(lang_code)
