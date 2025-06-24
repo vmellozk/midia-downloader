@@ -61,7 +61,8 @@ pip install -r requirements.txt
 5. Execute o script principal:
 
 ```bash
-python main.py
+python main.py #Windows
+python3 main.py #Linux e macOS
 ```
 
 ## 📦 Requisitos
