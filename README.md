@@ -34,8 +34,8 @@ Ideal para quem deseja salvar conteúdos para **estudo**, **trabalho** ou **laze
 1. **Clone este repositório**:
 
 ```bash
-git clone https://github.com/seu-usuario/nome-do-repositorio.git
-cd nome-do-repositorio
+git clone https://github.com/vmellozk/midia-downloader.git
+cd midia-downloader
 ```
 
 2. Crie um ambiente virtual (opcional, mas recomendado):
