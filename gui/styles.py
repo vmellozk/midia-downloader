@@ -3,15 +3,15 @@ QWidget {
     background-color: #1e1e1e;
     color: #f0f0f0;
     font-family: "Segoe UI", sans-serif;
-    font-size: 12pt;
 }
 
 QPushButton {
     background-color: #007acc;
     border: none;
-    padding: 8px 16px;
+    padding: 0.5em 1em;
     border-radius: 6px;
     color: white;
+    font-size: 1em;
 }
 
 QPushButton:hover {
@@ -21,7 +21,7 @@ QPushButton:hover {
 QGroupBox {
     border: 1px solid #444;
     border-radius: 8px;
-    margin-top: 20px;
+    margin-top: 1.2em;
 }
 
 QGroupBox::title {
@@ -33,7 +33,7 @@ QGroupBox::title {
 }
 
 QLineEdit, QLabel {
-    font-size: 11pt;
+    font-size: 1em;
 }
 
 QProgressBar {
@@ -42,6 +42,7 @@ QProgressBar {
     border: none;
     border-radius: 5px;
     text-align: center;
+    font-size: 0.9em;
 }
 
 QProgressBar::chunk {

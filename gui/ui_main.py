@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (
     QWidget, QPushButton, QLabel, QLineEdit, QFileDialog,
     QVBoxLayout, QTabWidget, QMessageBox, QHBoxLayout, QGroupBox,
-    QProgressBar, QTextEdit, QApplication, QComboBox, QStackedWidget
+    QProgressBar, QTextEdit, QApplication, QComboBox, QStackedWidget, QSizePolicy
 )
 from PySide6.QtCore import QStandardPaths
 from gui.styles import MINIMAL_STYLE
@@ -22,14 +22,15 @@ class MainWindow(QWidget):
         
         self.setWindowTitle("Downloader Midia")
         self.setWindowIcon(QIcon("assets/icon.png"))
-        self.setMinimumSize(700, 900)
+        self.resize(600, 200)
+        self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setStyleSheet(MINIMAL_STYLE)
 
         main_layout = QVBoxLayout()
         self.sidebar = Sidebar()
         self.sidebar.change_scr.connect(self.switch_screen)
         self.content_area = QStackedWidget()
-        
+
         # A interface principal será um widget (a tela principal), definindo as interfaces
         self.main_screen = QWidget()
         self.main_screen.setLayout(self.init_ui())  # retorna o layout já montado
@@ -46,7 +47,7 @@ class MainWindow(QWidget):
         main_layout.addWidget(self.sidebar)
         main_layout.addWidget(self.content_area, 1)
         self.setLayout(main_layout)
-        
+
     def switch_screen(self, screen_name):
         if screen_name == "home":
             self.content_area.setCurrentWidget(self.main_screen)
@@ -63,7 +64,7 @@ class MainWindow(QWidget):
 
         # Header
         header = QLabel(self.t["title"])
-        header.setStyleSheet("font-size: 20pt; font-weight: bold;")
+        header.setStyleSheet("font-size: 1.8em; font-weight: bold;")
         layout.addWidget(header)
 
         # Tabs
@@ -82,7 +83,7 @@ class MainWindow(QWidget):
 
         # Rodapé
         footer = QLabel(self.t["footer"])
-        footer.setStyleSheet("font-size: 10pt; color: #888;")
+        footer.setStyleSheet("font-size: 0.8em; color: #888;")
         layout.addWidget(footer)
 
         return layout
@@ -94,6 +95,7 @@ class MainWindow(QWidget):
         url_group = QGroupBox(self.t["url_input"])
         url_layout = QHBoxLayout()
         self.youtube_url = QLineEdit()
+        self.youtube_url.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         url_layout.addWidget(self.youtube_url)
         url_group.setLayout(url_layout)
         layout.addWidget(url_group)
@@ -101,18 +103,20 @@ class MainWindow(QWidget):
         output_group = QGroupBox(self.t["save"])
         output_layout = QHBoxLayout()
         self.output_dir = QLineEdit()
+        self.output_dir.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         browse_button = QPushButton(self.t["folder"])
-        
+
         filename_group = QGroupBox(self.t["archive_name"])
         filename_layout = QHBoxLayout()
         self.filename_input = QLineEdit()
+        self.filename_input.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)
         self.filename_input.setText("download_midia")
         filename_layout.addWidget(self.filename_input)
         #ext_label = QLabel(".mp3")
         #filename_layout.addWidget(ext_label)
         filename_group.setLayout(filename_layout)
         layout.addWidget(filename_group)
-        
+
         desktop_path = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.DesktopLocation)
         self.output_dir.setText(desktop_path)
         browse_button.clicked.connect(self.select_output_dir)
@@ -137,7 +141,7 @@ class MainWindow(QWidget):
         convert_button_video = QPushButton(self.t["download_video"])
         convert_button_video.clicked.connect(self.download_youtube_video)
         video_layout.addWidget(convert_button_video)
-        
+
         video_group.setLayout(video_layout)
         actions_layout_video.addWidget(video_group)
         video_group.setLayout(actions_layout_video)
@@ -156,7 +160,7 @@ class MainWindow(QWidget):
         actions_layout_audio.addWidget(audio_group)
         actions_group_audio.setLayout(actions_layout_audio)
         layout.addWidget(actions_group_audio)
-        
+
         widget.setLayout(layout)
         return widget
 
@@ -204,7 +208,7 @@ class MainWindow(QWidget):
 
     def show_message(self, message):
         QMessageBox.information(self, "Info", message)
-        
+
     def log(self, message):
         self.logs.append(message)
         QApplication.processEvents()  # força atualização da UI para mostrar o texto imediatamente
