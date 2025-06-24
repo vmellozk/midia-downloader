@@ -71,6 +71,43 @@ yt_dlp
 
 PySimpleGUI
 
+## ℹ️ Requisitos adicionais por sistema operacional
+
+#### 🔵 Windows
+
+O executável do `ffmpeg` já está incluído na pasta `ffmpeg/bin` do projeto.  
+Não é necessário instalar ou configurar nada adicionalmente — tudo já está pronto para uso.
+
+---
+
+#### 🐧 Linux
+
+Para que o projeto funcione corretamente no Linux, é necessário que o `ffmpeg` esteja instalado no sistema.
+
+##### 📥 Como instalar:
+
+Execute no terminal:
+
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+🔎 Para verificar se está instalado corretamente:
+
+```bash
+which ffmpeg
+which ffprobe
+```
+
+A saída deve ser algo como:
+```text
+/usr/bin/ffmpeg
+/usr/bin/ffprobe
+```
+
+Se os caminhos forem exibidos, significa que está tudo certo para utilizar o projeto.
+
 ## 💡 Sobre o Projeto
 
 Este é um projeto independente, com foco em:
