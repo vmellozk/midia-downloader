@@ -3,6 +3,7 @@ import sys
 import os
 import subprocess
 import glob
+import platform
 
 def resource_path(relative_path):
     # Para suportar PyInstaller
@@ -10,20 +11,30 @@ def resource_path(relative_path):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
+def get_ffmpeg_path():
+    if platform.system() == "Windows":
+        ffmpeg_dir = resource_path(os.path.join("ffmpeg", "bin"))
+        ffmpeg_exec = os.path.join(ffmpeg_dir, "ffmpeg.exe")
+    else:
+        ffmpeg_dir = "/usr/bin"
+        ffmpeg_exec = "ffmpeg"  # já está no PATH
+    return ffmpeg_dir, ffmpeg_exec
+
 def download_audio_youtube(video_url, output_path):
     try:
-        ffmpeg_dir = resource_path(os.path.join("ffmpeg", "bin"))
-        
+        ffmpeg_dir, _ = get_ffmpeg_path()  # usa-se ffmpeg_dir de acordo
+
         ydl_opts = {
             'format': 'bestaudio/best',
             'outtmpl': output_path,
-            'ffmpeg_location': ffmpeg_dir,
+            'ffmpeg_location': ffmpeg_dir,  # <- diretório, não executável!
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
                 'preferredquality': '192',
             }]
         }
+
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([video_url])
     except Exception as e:
@@ -31,7 +42,7 @@ def download_audio_youtube(video_url, output_path):
 
 def download_video_youtube(video_url, output_path, quality):
     try:
-        ffmpeg_dir = resource_path(os.path.join("ffmpeg", "bin"))
+        ffmpeg_dir, ffmpeg_exec = get_ffmpeg_path()
         base_path = os.path.splitext(output_path)[0]
         final_output = base_path + ".mp4"
         
@@ -58,7 +69,7 @@ def download_video_youtube(video_url, output_path, quality):
         ydl_opts = {
             'format': selected_format,
             'outtmpl': os.path.join(cache_dir, 'temp_video.%(format_id)s.%(ext)s'),
-            'ffmpeg_location': ffmpeg_dir,
+            'ffmpeg_location': ffmpeg_dir,  # <- aqui também usa o diretório
             'noplaylist': True,
             'progress_hooks': [hook],
             'keepvideo': True,  # <-- ESSENCIAL PARA EVITAR A DELEÇÃO DOS ARQUIVOS
@@ -77,7 +88,7 @@ def download_video_youtube(video_url, output_path, quality):
 
         # Merge com ffmpeg
         cmd = [
-            os.path.join(ffmpeg_dir, 'ffmpeg'),
+            ffmpeg_exec,
             '-i', video_file,
             '-i', audio_file,
             '-c:v', 'copy',
