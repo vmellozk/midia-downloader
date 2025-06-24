@@ -13,11 +13,11 @@ def resource_path(relative_path):
 
 def get_ffmpeg_path():
     if platform.system() == "Windows":
-        ffmpeg_dir = resource_path(os.path.join("ffmpeg", "bin"))
-        ffmpeg_exec = os.path.join(ffmpeg_dir, "ffmpeg.exe")
+        ffmpeg_exec = resource_path(os.path.join("ffmpeg", "bin", "ffmpeg.exe"))
+        ffmpeg_dir = os.path.dirname(ffmpeg_exec)
     else:
+        ffmpeg_exec = "/usr/bin/ffmpeg"  # já está no PATH
         ffmpeg_dir = "/usr/bin"
-        ffmpeg_exec = "ffmpeg"  # já está no PATH
     return ffmpeg_dir, ffmpeg_exec
 
 def download_audio_youtube(video_url, output_path):

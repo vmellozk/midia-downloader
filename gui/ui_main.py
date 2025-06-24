@@ -21,7 +21,7 @@ class MainWindow(QWidget):
         self.t = translations[self.lang] #referência direta à tradução
         
         self.setWindowTitle("Downloader Midia")
-        self.setWindowIcon(QIcon("assets/icon.png"))
+        self.setWindowIcon(QIcon())
         self.resize(600, 200)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.setStyleSheet(MINIMAL_STYLE)
