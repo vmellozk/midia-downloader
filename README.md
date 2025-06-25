@@ -6,7 +6,7 @@ Ideal para quem deseja salvar conteúdos para **estudo**, **trabalho** ou **laze
 ## 🔧 Tecnologias Utilizadas
 
 - **[yt_dlp](https://github.com/yt-dlp/yt-dlp)** – Biblioteca poderosa para download de vídeos e áudios de múltiplas plataformas.  
-- **[PySimpleGUI](https://pysimplegui.readthedocs.io/)** – Interface gráfica simples, leve e intuitiva.  
+- **[PySide6](https://doc.qt.io/qtforpython/)** – Interface gráfica moderna, leve e altamente personalizável.
 - **os** – Manipulação de arquivos e diretórios no sistema operacional.
 
 ## 📌 Como Funciona
@@ -24,10 +24,10 @@ Ideal para quem deseja salvar conteúdos para **estudo**, **trabalho** ou **laze
 ## 🔄 Em Desenvolvimento Contínuo
 
 - Suporte a mais plataformas  
-- Melhoria na verificação e validação de links  
 - Mais opções de formatos e qualidades de saída  
 - Interface cada vez mais amigável e responsiva
-- Build para criar um App Executável
+- Embutir o FFMPeg junto do instalador do Linux.
+- Configurações Extras
 
 ## 🚀 Como Executar o Projeto
 
